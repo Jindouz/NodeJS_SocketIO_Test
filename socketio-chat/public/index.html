@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Chat</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+      const messages = document.getElementById('messages');
+
+      // Display messages
+      const displayMessage = (message) => {
+        const item = document.createElement('li');
+        item.textContent = `[${new Date(message.timestamp).toLocaleTimeString()}] ${message.text}`;
+        messages.appendChild(item);
+      };
+
+      // Initialize with the last 50 messages
+      socket.on('init', (msgs) => {
+        msgs.forEach(displayMessage);
+      });
+
+      // Handle new messages
+      socket.on('message', (message) => {
+        displayMessage(message);
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('message', input.value);
+          input.value = '';
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="centered-box">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" />
+      <button id="button">Send</button>
+    </form>
+  </div>
+</body>
+</html>

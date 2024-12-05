@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO V4 Test</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+
+      socket.on('connect', () => {
+        console.log('Connected to server:', socket.id);
+
+        // Send PING message to server
+        socket.emit('PING');
+      });
+
+      socket.on('PONG', () => {
+        console.log('Received PONG from server');
+      });
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Socket.IO V4 Test</h1>
+</body>
+</html>
